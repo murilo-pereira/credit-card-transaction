@@ -130,3 +130,12 @@ Status: 400 Bad Request
     "errors": []
 }
 ````
+
++ L4 - Concurrent transactions
+
+````
+To-do: Implement a library to check if there is already a transaction being processed for the account.
+
+- I would put this transaction information being processed for the account, in a centralized Redis for example,
+  and query at the beginning of each transaction.
+````
