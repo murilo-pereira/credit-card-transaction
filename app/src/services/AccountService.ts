@@ -23,7 +23,7 @@ export class AccountService {
             return new DefaultResponse(Account.SUCCESS)
         }
 
-        return new DefaultResponse(Account.ERROR)
+        return new DefaultResponse(Account.SERVER_ERROR)
     }
 
     public async getAccountById(accountId: number) {

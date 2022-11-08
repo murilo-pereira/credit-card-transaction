@@ -1,5 +1,5 @@
 export enum Account {
     SUCCESS = '00',
     USER_ALREADY_REGISTERED = '01',
-    ERROR = '07'
+    SERVER_ERROR = '07'
 }
