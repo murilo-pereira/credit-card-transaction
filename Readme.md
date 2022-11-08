@@ -38,16 +38,26 @@ POST `${host}/api/account`
 
 - Request
 
+```
+ - accountId: number
+ - cpf: string length(11)
+ - benefitAmounts: object
+ - benefitAmounts.meal: number
+ - benefitAmounts.food: number
+ - benefitAmounts.culture: number
+ - cash: number
+```
+
 ```json
 {
-  "accountId": 1, //number
-  "cpf": "11122233344", //string length(11)
-  "benefitAmounts": { //object
-    "meal": 100, //number
-    "food": 100, //number
-    "culture": 100 //number
+  "accountId": 1,
+  "cpf": "11122233344",
+  "benefitAmounts": {
+    "meal": 100,
+    "food": 100,
+    "culture": 100 
   },
-  "cash": 100 //number
+  "cash": 100
 }
 ```
 
@@ -81,12 +91,19 @@ POST `${host}/api/transaction`
 
 - Request
 
+```
+ - account: number
+ - totalAmount: number
+ - mcc: string length(4)
+ - merchant: string length(40)
+```
+
 ```json
 {
-  "account": 1, //number
-  "totalAmount": 30, //number
-  "mcc": "5411", //string length(4)
-  "merchant": "SUPERMERCADO DO ZE          SAO PAULO BR" //string length(40)
+  "account": 1,
+  "totalAmount": 30,
+  "mcc": "5411",
+  "merchant": "SUPERMERCADO DO ZE          SAO PAULO BR"
 }
 ```
 
