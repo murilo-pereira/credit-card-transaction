@@ -6,10 +6,12 @@ export class AccountRepository extends BaseRepository {
         return 'accounts'
     }
 
-    public async saveAccount(account: AccountDto) {
+    public async saveAccount(account: AccountDto): Promise<boolean> {
         const mongoDb = await this.getDb()
 
-        return mongoDb.collection(this.getCollectionName()).insertOne(account)
+        const save = await mongoDb.collection(this.getCollectionName()).insertOne(account)
+
+        return save.acknowledged
     }
 
     public async getAccountById(id: number) {

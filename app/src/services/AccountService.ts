@@ -19,7 +19,7 @@ export class AccountService {
 
         const saveAccount = await this.accountRepository.saveAccount(account)
 
-        if(saveAccount.acknowledged){
+        if(saveAccount){
             return new DefaultResponse(Account.SUCCESS)
         }
 

@@ -35,7 +35,7 @@ export class TransactionService {
         const categoryAmount = account.benefitAmounts[category]
 
         if(transaction.totalAmount > categoryAmount){
-            return this.authorizeWithFallback(transaction, category, categoryAmount, account)
+            return this.authorizeWithCash(transaction, account)
         }
 
         const newCategoryAmount = categoryAmount - transaction.totalAmount
@@ -50,13 +50,19 @@ export class TransactionService {
     }
 
     private getTransactionCategory(transaction: TransactionDto): string | undefined {
-        const category = this.mccCategoryService.getCategoryLowerCaseByMcc(transaction.mcc)
+        let category = this.mccCategoryService.getCategoryLowerCaseByMerchant(transaction.merchant.substring(0, 25))
 
         if(category){
             return category
         }
 
-        return this.mccCategoryService.getCategoryLowerCaseByMerchant(transaction.merchant.substring(0, 25))
+        category = this.mccCategoryService.getCategoryLowerCaseByMcc(transaction.mcc)
+
+        if(category){
+            return category
+        }
+
+        return undefined
     }
 
     private async authorizeWithCash(transaction: TransactionDto, account: Document): Promise<DefaultResponse> {
@@ -67,29 +73,6 @@ export class TransactionService {
         const newCashAmount = account.cash - transaction.totalAmount
 
         const update = await this.accountService.updateCash(transaction.account, newCashAmount)
-
-        if(update.acknowledged){
-            return new DefaultResponse(Transaction.APPROVED)
-        }
-
-        return new DefaultResponse(Transaction.REJECTED)
-    }
-
-    private async authorizeWithFallback(
-        transaction: TransactionDto,
-        category: string,
-        categoryAmount: number,
-        account: Document
-    ): Promise<DefaultResponse> {
-        const missingAmount = transaction.totalAmount - categoryAmount
-
-        if(missingAmount > account.cash){
-            return new DefaultResponse(Transaction.REJECTED_BALANCE)
-        }
-
-        const newCashAmount = account.cash - missingAmount
-
-        const update = await this.accountService.updateBenefitAmountAndCash(transaction.account, category, 0, newCashAmount)
 
         if(update.acknowledged){
             return new DefaultResponse(Transaction.APPROVED)
